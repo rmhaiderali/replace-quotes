@@ -4,6 +4,10 @@ const stringOrTuple = z.union([z.string(), z.tuple([z.string(), z.string()])])
 
 type quote = string | [string, string]
 
+export const double = String.fromCharCode(34)
+export const single = String.fromCharCode(39)
+export const backtick = String.fromCharCode(96)
+
 export default function replaceQuotes(...args: quote[]) {
   //
   if (args.length < 2)
