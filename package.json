@@ -2,8 +2,9 @@
   "name": "replace-quotes",
   "version": "0.1.1",
   "description": "Swap quote styles in strings effortlessly",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsup",
@@ -11,8 +12,8 @@
     "prepack": "npm run build"
   },
   "exports": {
-    "import": "./dist/index.mjs",
-    "require": "./dist/index.js"
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
   },
   "repository": "https://github.com/rmhaiderali/replace-quotes",
   "homepage": "https://github.com/rmhaiderali/replace-quotes",
@@ -28,7 +29,6 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "boxen": "^8.0.1",
     "node-inspect-extracted": "^3.1.0",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"

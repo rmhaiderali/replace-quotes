@@ -1,0 +1,29 @@
+[
+  "'",
+  "\"",
+  "`",
+  "`\"'",
+  "hello\\‘hi\\’world",
+  123,
+  123n,
+  null,
+  NaN,
+  true,
+  Infinity,
+  undefined,
+  Symbol(hello"'world),
+  [Function: example],
+  [class (anonymous)],
+  [Function (anonymous)],
+  /(?:)/,
+  Map(1) { "hello\"'world" => "hello\"'world" },
+  Set(3) { 1, 2, 3 },
+  WeakMap { <items unknown> },
+  WeakSet { <items unknown> },
+  Promise { <pending> }
+]
+{
+  "hello\"'world": [Function: example],
+  "hello\"'class": [class hello"'class],
+  "hello\"'function": [Function: hello"'function]
+}

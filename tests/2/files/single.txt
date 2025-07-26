@@ -1,0 +1,29 @@
+const singleInSingle = '\''
+const doubleInSingle = '"'
+const backtickInSingle = '`'
+const singleDoubleInSingle = '\'"'
+const singleBacktickInSingle = '\'`'
+const doubleBacktickInSingle = '"`'
+const singleDoubleBacktickInSingle = '\'"`'
+
+const singleInDouble = '\''
+const doubleInDouble = '"'
+const backtickInDouble = '`'
+const singleDoubleInDouble = '\'"'
+const singleBacktickInDouble = '\'`'
+const doubleBacktickInDouble = '"`'
+const singleDoubleBacktickInDouble = '\'"`'
+
+const singleInBacktick = '\''
+const doubleInBacktick = '"'
+const backtickInBacktick = '`'
+const singleDoubleInBacktick = '\'"'
+const singleBacktickInBacktick = '\'`'
+const doubleBacktickInBacktick = '"`'
+const singleDoubleBacktickInBacktick = '\'"`'
+
+const escaped = '"'
+const escapedWrong = ''"
+
+const escaped2 = '\\"'
+const escapedWrong2 = '\\'"
