@@ -1,8 +1,12 @@
 import { z } from "zod"
 
-const stringOrTuple = z.union([z.string(), z.tuple([z.string(), z.string()])])
+const stringOrTuple = z.union([
+  z.string(),
+  z.tuple([z.string(), z.string()]),
+  z.tuple([z.string(), z.string(), z.boolean()]),
+])
 
-type quote = string | [string, string]
+type quote = string | [string, string, boolean?]
 
 export const double = String.fromCharCode(34)
 export const single = String.fromCharCode(39)
@@ -16,12 +20,15 @@ export default function replaceQuotes(...args: quote[]) {
     )
 
   args.forEach((arg, index) => {
-    if (!stringOrTuple.safeParse(arg).success)
+    const result = stringOrTuple.safeParse(arg)
+    if (!result.success) {
+      console.log(result.error.message)
       throw new Error(
         "Invalid argument at index " +
           index +
-          " expected a string or a tuple of two strings"
+          " expected a string or [string, string, boolean?]"
       )
+    }
   })
 
   const sourceQuotesPairs = args.map((f) => (Array.isArray(f) ? f : [f, f]))
@@ -61,8 +68,10 @@ export default function replaceQuotes(...args: quote[]) {
       // if no group matched, return the original match
       if (!groups.some(Boolean)) return match[0]
 
-      const [matchedSourceStartQuote, matchedSourceEndQuote] =
+      const [matchedSourceStartQuote, matchedSourceEndQuote, onlyForContext] =
         sourceQuotesPairs[groups.findIndex(Boolean)]
+
+      if (onlyForContext) return match[0]
 
       let newString = match[0]
         .slice(1, -1)

@@ -1,0 +1,2 @@
+[ "it's a beautiful day", 'hello world' ]
+[ "it's a beautiful day", ~hello world~ ]
