@@ -1,37 +1,43 @@
 import { z } from "zod"
+import { inspect } from "node-inspect-extracted"
 
-const stringOrTuple = z.union([
+const matchSchema = z.union([
   z.string(),
   z.tuple([z.string(), z.string()]),
   z.tuple([z.string(), z.string(), z.boolean()]),
 ])
+const replaceSchema = z.union([z.string(), z.tuple([z.string(), z.string()])])
 
-type quote = string | [string, string, boolean?]
+type match = string | [string, string] | [string, string, boolean]
+type replace = string | [string, string]
+
+const matchString = "string | [string, string] | [string, string, boolean]"
+const replaceString = "string | [string, string]"
 
 export const double = String.fromCharCode(34)
 export const single = String.fromCharCode(39)
 export const backtick = String.fromCharCode(96)
 
-export default function replaceQuotes(...args: quote[]) {
+export default function replaceQuotes(...quotes: [...replace[], match]) {
   //
-  if (args.length < 2)
-    throw new Error(
-      'At least two arguments are required: try replaceQuotes("\'", ["‘", "’"])'
-    )
+  if (quotes.length < 2) throw new Error("At least two arguments are required")
 
-  args.forEach((arg, index) => {
-    const result = stringOrTuple.safeParse(arg)
+  quotes.forEach((quote, index) => {
+    const isLast = index + 1 === quotes.length
+    const result = (isLast ? replaceSchema : matchSchema).safeParse(quote)
     if (!result.success) {
-      console.log(result.error.message)
       throw new Error(
         "Invalid argument at index " +
           index +
-          " expected a string or [string, string, boolean?]"
+          "\nExpected: " +
+          (isLast ? replaceString : matchString) +
+          "\nGot: " +
+          inspect(quote)
       )
     }
   })
 
-  const sourceQuotesPairs = args.map((f) => (Array.isArray(f) ? f : [f, f]))
+  const sourceQuotesPairs = quotes.map((f) => (Array.isArray(f) ? f : [f, f]))
   const [targetStartQuote, targetEndQuote] = sourceQuotesPairs.pop() as [
     string,
     string
