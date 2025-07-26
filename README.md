@@ -1,67 +1,87 @@
 # 📦 Replace Quotes
 
-The `replace-quotes` package is a lightweight JavaScript utility to replace single, double, or custom quote styles with a desired quote format — perfect for consistent formatting, smart typography (like curly quotes), or cleaning up mixed quote inputs.
+**`replace-quotes`** is a lightweight JavaScript utility for replacing straight, curly, or custom quotes with your desired quote style. It’s great for maintaining consistent formatting, improving typography (like using curly quotes), or cleaning up mixed quote styles in text.
 
 ## ✨ Features
 
-- **At least two arguments required**:
+- **Requires at least two arguments**:
 
-  - One or more **source quotes** (strings or pairs)
-  - The final argument is the **target quote** (string or pair)
+  - One or more **quote styles to match** (called _match quotes_)
+  - A **target quote** style to replace them with (called _replace quote_)
 
 - **Supports**:
 
-  - **Single quote styles** (e.g. `'`, `"`)
-  - **Directional quotes** (e.g. `["‘", "’"]`, `["“", "”"]`)
-  - **Multiple source formats** at once
+  - Straight quotes (like `'` or `"`)
+  - Paired quotes (like `["‘", "’"]` or `["“", "”"]`)
+  - Multiple quote formats at once
 
-- Returns a **reusable transformer function**
+- **Flexible matching**:
 
-- Handles **escaped quotes** properly
+  - Match quotes can be:
 
-## 🧠 API
+    - A single quote character (e.g. `'`)
+    - A pair `[start, end]` (e.g. `["‘", "’"]`)
+    - Or a pair with a third flag: `[start, end, true]` — tells the function to **only consider these quotes for context**, not replace them
 
-```ts
-type qoute = string | [string, string]
-replaceQuotes(...source: qoute[], target: qoute): (text: string) => string
-```
+- **Replace quote**:
 
-- **Arguments**:
+  - Can be a single character or a pair `[start, end]`
 
-  - One or more `source` quotes and one `target` quote (last argument)
-  - A quote can be a single string or a pair `[start, end]`
+- **Returns**:
 
-- **Returns**: A function that takes a `string` and returns a modified string with replaced quotes
+  - A function that takes a `string` input and returns the text with quotes replaced as specified
 
 ## 🧑‍💻 Usage
 
 ```js
-import replaceQuotes from "replace-quotes"
+import replaceQuotes, { single, double } from "replace-quotes"
 import { inspect } from "node-inspect-extracted"
 
 const toDoubleQuotes = replaceQuotes(
-  // from
-  "'",
-  '"',
-  // to
-  '"'
+  single,
+  double,
+  double // Replace all with double quotes
 )
 
 const toCurlyQuotes = replaceQuotes(
-  // from
-  "'",
-  '"',
-  // to
+  single,
+  double,
+  ["‘", "’"] // Replace all with curly quotes
+)
+
+const text = inspect(["it's a beautiful day", "hello world"])
+
+console.log(text)                 // [ "it's a beautiful day", 'hello world' ]
+console.log(toDoubleQuotes(text)) // [ "it's a beautiful day", "hello world" ]
+console.log(toCurlyQuotes(text))  // [ ‘it's a beautiful day’, ‘hello world’ ]
+```
+
+## 🎯 Context-Aware Matching
+
+If you want to replace only **single quotes** with curly quotes, but leave single quotes **inside double-quoted strings** untouched, use the _context flag_.
+
+```js
+import replaceQuotes, { single, double } from "replace-quotes"
+import { inspect } from "node-inspect-extracted"
+
+const toCurlyWithoutContext = replaceQuotes(
+  single,
   ["‘", "’"]
 )
 
-const text = inspect(["hello world", "it's a beautiful day"])
+const toCurlyWithContext = replaceQuotes(
+  single,
+  [double, double, true], // Use double quotes for context only
+  ["‘", "’"]
+)
 
-console.log(text)                 // [ 'hello world', "It's a beautiful day" ]
-console.log(toDoubleQuotes(text)) // [ "hello world", "It's a beautiful day" ]
-console.log(toCurlyQuotes(text))  // [ ‘hello world’, ‘It's a beautiful day’ ]
+const text = inspect(["it's a beautiful day", "hello world"])
+
+console.log(text)                        // [ "it's a beautiful day", 'hello world' ]
+console.log(toCurlyWithoutContext(text)) // [ "it‘s a beautiful day", ’hello world' ] ❌ Incorrect
+console.log(toCurlyWithContext(text))    // [ "it's a beautiful day", ‘hello world’ ] ✅ Correct
 ```
 
 ## ⚠️ Notes
 
-- Input must be a **string** (e.g. from `util.inspect` or `node-inspect-extracted` etc.)
+- Input must be a **string**. You can pass strings from utilities like `util.inspect` or `node-inspect-extracted`.

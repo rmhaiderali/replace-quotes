@@ -1,6 +1,6 @@
 {
   "name": "replace-quotes",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Swap quote styles in strings effortlessly",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -26,10 +26,10 @@
     "dist"
   ],
   "dependencies": {
+    "node-inspect-extracted": "^3.1.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "node-inspect-extracted": "^3.1.0",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
   },
