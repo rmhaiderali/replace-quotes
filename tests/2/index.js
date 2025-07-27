@@ -4,15 +4,13 @@ const {
   single,
   double,
   backtick,
+  lineByLine,
   default: replaceQuotes,
 } = await fetchModuleFromURL("../../dist/index.js")
 
 const curly = ["‘", "’"]
 
-const processLinesAndJoin = (func) => (text) =>
-  text.split("\n").map(func).join("\n")
-
-const toCurlyQuotes = processLinesAndJoin(
+const toCurlyQuotes = lineByLine(
   replaceQuotes(
     // from
     single,
@@ -23,7 +21,7 @@ const toCurlyQuotes = processLinesAndJoin(
   )
 )
 
-const toSingleQuotes = processLinesAndJoin(
+const toSingleQuotes = lineByLine(
   replaceQuotes(
     // from
     single,
@@ -34,7 +32,7 @@ const toSingleQuotes = processLinesAndJoin(
   )
 )
 
-const toDoubleQuotes = processLinesAndJoin(
+const toDoubleQuotes = lineByLine(
   replaceQuotes(
     // from
     single,
@@ -45,7 +43,7 @@ const toDoubleQuotes = processLinesAndJoin(
   )
 )
 
-const toBacktickQuotes = processLinesAndJoin(
+const toBacktickQuotes = lineByLine(
   replaceQuotes(
     // from
     single,
@@ -56,7 +54,7 @@ const toBacktickQuotes = processLinesAndJoin(
   )
 )
 
-const fromSingleToDoubleQuotes = processLinesAndJoin(
+const fromSingleToDoubleQuotes = lineByLine(
   replaceQuotes(
     // from
     single,
@@ -65,7 +63,7 @@ const fromSingleToDoubleQuotes = processLinesAndJoin(
   )
 )
 
-const fromSingleToBacktickQuotes = processLinesAndJoin(
+const fromSingleToBacktickQuotes = lineByLine(
   replaceQuotes(
     // from
     single,
@@ -74,7 +72,7 @@ const fromSingleToBacktickQuotes = processLinesAndJoin(
   )
 )
 
-const fromSingleToCurlyQuotes = processLinesAndJoin(
+const fromSingleToCurlyQuotes = lineByLine(
   replaceQuotes(
     // from
     single,
@@ -83,7 +81,7 @@ const fromSingleToCurlyQuotes = processLinesAndJoin(
   )
 )
 
-const fromDoubleToSingleQuotes = processLinesAndJoin(
+const fromDoubleToSingleQuotes = lineByLine(
   replaceQuotes(
     // from
     double,
@@ -92,7 +90,7 @@ const fromDoubleToSingleQuotes = processLinesAndJoin(
   )
 )
 
-const fromDoubleToBacktickQuotes = processLinesAndJoin(
+const fromDoubleToBacktickQuotes = lineByLine(
   replaceQuotes(
     // from
     double,
@@ -101,7 +99,7 @@ const fromDoubleToBacktickQuotes = processLinesAndJoin(
   )
 )
 
-const fromDoubleToCurlyQuotes = processLinesAndJoin(
+const fromDoubleToCurlyQuotes = lineByLine(
   replaceQuotes(
     // from
     double,
@@ -110,7 +108,7 @@ const fromDoubleToCurlyQuotes = processLinesAndJoin(
   )
 )
 
-const fromBacktickToSingleQuotes = processLinesAndJoin(
+const fromBacktickToSingleQuotes = lineByLine(
   replaceQuotes(
     // from
     backtick,
@@ -119,7 +117,7 @@ const fromBacktickToSingleQuotes = processLinesAndJoin(
   )
 )
 
-const fromBacktickToDoubleQuotes = processLinesAndJoin(
+const fromBacktickToDoubleQuotes = lineByLine(
   replaceQuotes(
     // from
     backtick,
@@ -128,7 +126,7 @@ const fromBacktickToDoubleQuotes = processLinesAndJoin(
   )
 )
 
-const fromBacktickToCurlyQuotes = processLinesAndJoin(
+const fromBacktickToCurlyQuotes = lineByLine(
   replaceQuotes(
     // from
     backtick,
@@ -137,7 +135,7 @@ const fromBacktickToCurlyQuotes = processLinesAndJoin(
   )
 )
 
-const fromCurlyToSingleQuotes = processLinesAndJoin(
+const fromCurlyToSingleQuotes = lineByLine(
   replaceQuotes(
     // from
     curly,
@@ -146,7 +144,7 @@ const fromCurlyToSingleQuotes = processLinesAndJoin(
   )
 )
 
-const fromCurlyToDoubleQuotes = processLinesAndJoin(
+const fromCurlyToDoubleQuotes = lineByLine(
   replaceQuotes(
     // from
     curly,
@@ -155,7 +153,7 @@ const fromCurlyToDoubleQuotes = processLinesAndJoin(
   )
 )
 
-const fromCurlyToBacktickQuotes = processLinesAndJoin(
+const fromCurlyToBacktickQuotes = lineByLine(
   replaceQuotes(
     // from
     curly,

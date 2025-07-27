@@ -18,6 +18,12 @@ export const double = String.fromCharCode(34)
 export const single = String.fromCharCode(39)
 export const backtick = String.fromCharCode(96)
 
+export function lineByLine(
+  fn: (line: string, index: number, array: string[]) => string
+) {
+  return (text: string) => text.split("\n").map(fn).join("\n")
+}
+
 export default function replaceQuotes(...quotes: [...replace[], match]) {
   //
   if (quotes.length < 2) throw new Error("At least two arguments are required")
@@ -26,13 +32,16 @@ export default function replaceQuotes(...quotes: [...replace[], match]) {
     const isLast = index + 1 === quotes.length
     const result = (isLast ? replaceSchema : matchSchema).safeParse(quote)
     if (!result.success) {
+      const toDoubleQuotes = lineByLine(
+        replaceQuotes(single, double, backtick, double)
+      )
       throw new Error(
         "Invalid argument at index " +
           index +
           "\nExpected: " +
           (isLast ? replaceString : matchString) +
           "\nGot: " +
-          inspect(quote)
+          toDoubleQuotes(inspect(quote))
       )
     }
   })
