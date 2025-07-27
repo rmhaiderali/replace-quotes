@@ -13,6 +13,7 @@ const { inspect } = await import(
     : "node-inspect-extracted"
 )
 
+const debug = false
 const curly = ["‘", "’"]
 
 const toCurlyQuotes = replaceQuotes(
@@ -57,6 +58,7 @@ const array = [
   example,
   class {},
   function () {},
+  new Date(new Date("2025/01/01") - new Date().getTimezoneOffset() * 60 * 1000),
   new RegExp(),
   new Map([["hello\"'world", "hello\"'world"]]),
   new Set([1, 2, 3]),
@@ -71,7 +73,8 @@ const object = {
   "hello\"'function": function () {},
 }
 
-const mixed = inspect(array) + "\n" + inspect(object)
+const mixed =
+  inspect(array, { colors: true }) + "\n" + inspect(object, { colors: true })
 
 const mixedCurly = toCurlyQuotes(mixed)
 const mixedCurlyDouble = fromCurlyToDoubleQuotes(mixedCurly)
@@ -92,6 +95,12 @@ if (!mixedQuotesExpected || !doubleQuotesExpected || !curlyQuotesExpected) {
 // writeFileSync("files/mixed.txt", mixed)
 // writeFileSync("files/curly.txt", mixedCurly)
 // writeFileSync("files/double.txt", mixedCurlyDouble)
+
+if (debug) {
+  console.log(mixed)
+  console.log(mixedCurly)
+  console.log(mixedCurlyDouble)
+}
 
 log("mixed == expected")
 log(mixed === mixedQuotesExpected)
