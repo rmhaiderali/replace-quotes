@@ -1,4 +1,9 @@
-import { isBrowser, log, getFileContent, fetchModuleFromURL } from "./utils.js"
+import {
+  log,
+  localOrRemote,
+  getFileContent,
+  fetchModuleFromURL,
+} from "./utils.js"
 
 const {
   single,
@@ -6,11 +11,7 @@ const {
   default: replaceQuotes,
 } = await fetchModuleFromURL("../../dist/index.js")
 
-const { inspect } = await import(
-  isBrowser
-    ? "https://cdn.jsdelivr.net/npm/node-inspect-extracted/+esm"
-    : "node-inspect-extracted"
-)
+const { inspect } = await import(localOrRemote("node-inspect-extracted"))
 
 const replace = replaceQuotes(
   // from

@@ -36,32 +36,38 @@ async function getFileContent(filePath) {
 }
 
 async function importFromText(text) {
-  if (isBrowser) {
-    const blob = new Blob([text], { type: "text/javascript" })
-    const url = URL.createObjectURL(blob)
-    const module = await import(url)
-    URL.revokeObjectURL(url)
-    return module
-  }
-  const { writeFileSync, unlinkSync } = await import("node:fs")
-  const { randomUUID } = await import("node:crypto")
-  const modulePath = "module" + randomUUID() + ".js"
-  writeFileSync(modulePath, text)
-  const module = await import(modulePath)
-  unlinkSync(modulePath)
+  const blob = new Blob([text], { type: "text/javascript" })
+  const url = URL.createObjectURL(blob)
+  const module = await import(url)
+  URL.revokeObjectURL(url)
   return module
 }
 
+let packages = {}
+
+if (isBrowser) {
+  const packageLock = await getFileContent("../../package-lock.json")
+  packages = JSON.parse(packageLock).packages || {}
+}
+
+function localOrRemote(name) {
+  if (!isBrowser) return name
+  const version = packages["node_modules/" + name]?.version || "latest"
+  return "https://cdn.jsdelivr.net/npm/" + name + "@" + version + "/+esm"
+}
+
 async function fetchModuleFromURL(url) {
-  if (!isBrowser) return import(url)
+  if (!isBrowser) return await import(url)
 
   let text = await getFileContent(url)
-  if (!text) {
-    throw new Error("Failed to load module from " + url)
-  }
+  if (!text) throw new Error("Failed to load module from " + url)
+
   return await importFromText(
-    text.replace(/from "(.*?)"/g, 'from "https://cdn.jsdelivr.net/npm/$1/+esm"')
+    text.replace(
+      /from "(.*?)"/g,
+      (match, group) => "from '" + localOrRemote(group) + "'"
+    )
   )
 }
 
-export { isBrowser, log, getFileContent, fetchModuleFromURL }
+export { log, localOrRemote, getFileContent, fetchModuleFromURL }
